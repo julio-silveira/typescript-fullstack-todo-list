@@ -7,6 +7,7 @@ import { ContextType } from '../../@types/ContextTypes'
 import { IFetchLoginMessage } from '../../@types/taskTypes'
 import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 
 const FORM_INITIAL_STATE = {
   username: '',
@@ -80,10 +81,16 @@ export default function LoginForm() {
         component="form"
         onSubmit={handleSubmit}
       >
-        <Typography color="primary" variant="h5" pb={5}>
-          To do List
-        </Typography>
-
+        <Box sx={{ display: 'flex', alignItems: 'center', pb: 3 }}>
+          <FormatListBulletedIcon
+            fontSize="large"
+            color="primary"
+            sx={{ pr: 1 }}
+          />
+          <Typography color="primary" variant="h5">
+            To do list
+          </Typography>
+        </Box>
         <TextField
           size="small"
           label="Nome de Usuário"
