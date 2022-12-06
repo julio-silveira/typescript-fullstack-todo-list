@@ -4,7 +4,6 @@ import { userLogin, userRegister } from '../../helpers/userFetch'
 import { IUser } from '../../@types/userTypes'
 import AppContext from '../../context/AppContext'
 import { ContextType } from '../../@types/ContextTypes'
-import { Modal } from '../Modal'
 import { IFetchLoginMessage } from '../../@types/taskTypes'
 import { Box, Button, Paper, TextField, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
@@ -15,9 +14,7 @@ const FORM_INITIAL_STATE = {
 }
 
 export default function LoginForm() {
-  const { openModalWithContent, isModalOpen } = useContext(
-    AppContext
-  ) as ContextType
+  const { openModalWithContent } = useContext(AppContext) as ContextType
 
   const navigate = useNavigate()
   const [isRegister, setIsRegister] = useState(false)
@@ -34,11 +31,11 @@ export default function LoginForm() {
     )) as IFetchLoginMessage
 
     if (status === 201 && message !== undefined) {
-      openModalWithContent(message)
+      openModalWithContent(message, 'success')
       setIsRegister(false)
       setFormData(FORM_INITIAL_STATE)
     } else if (message !== undefined) {
-      openModalWithContent(message)
+      openModalWithContent(message, 'error')
     }
   }
 
@@ -48,7 +45,7 @@ export default function LoginForm() {
       setFormData(FORM_INITIAL_STATE)
       navigate('/tasks')
     } else {
-      openModalWithContent(message)
+      openModalWithContent(message, 'error')
     }
   }
 
@@ -61,6 +58,8 @@ export default function LoginForm() {
     <Paper
       elevation={2}
       sx={{
+        border: '1px solid #42a5f5',
+        bgcolor: '#e3f2fd',
         width: { xs: '90%', sm: '40%', md: '30%' },
         display: 'flex',
         flexDirection: 'column',
@@ -81,14 +80,14 @@ export default function LoginForm() {
         component="form"
         onSubmit={handleSubmit}
       >
-        <Typography variant="h5" pb={5}>
+        <Typography color="primary" variant="h5" pb={5}>
           To do List
         </Typography>
 
         <TextField
           size="small"
           label="Nome de Usuário"
-          variant="outlined"
+          variant="standard"
           onChange={handleChange}
           value={formData.username}
           type="username"
@@ -98,6 +97,7 @@ export default function LoginForm() {
         <TextField
           size="small"
           label="Senha"
+          variant="standard"
           onChange={handleChange}
           value={formData.password}
           type="password"
@@ -119,7 +119,7 @@ export default function LoginForm() {
             {isRegister ? 'Registrar' : 'Entrar'}
           </Button>
           <Box sx={{ display: 'flex' }}>
-            <Typography variant="body2">
+            <Typography color="primary" variant="body2">
               {isRegister ? 'Deseja fazer login?' : 'Não tem conta?'}
 
               <Button
@@ -133,8 +133,6 @@ export default function LoginForm() {
             </Typography>
           </Box>
         </Box>
-
-        {isModalOpen && <Modal />}
       </Stack>
     </Paper>
   )

@@ -1,3 +1,4 @@
+import { AlertColor } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { ITaskData } from '../@types/taskTypes'
 import { getTasks } from '../helpers/taskFetch'
@@ -11,6 +12,7 @@ const Provider: React.FC<iProps> = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [userTasks, setUserTasks] = useState<ITaskData[]>([])
   const [modalContent, setModalContent] = useState<string>('')
+  const [modalType, setModalType] = useState<AlertColor>('error')
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
 
   const updateTasks = useCallback(async () => {
@@ -34,7 +36,8 @@ const Provider: React.FC<iProps> = ({ children }) => {
   }, [updateTasks])
 
   const closeModal = () => setModalOpen(false)
-  const openModalWithContent = (content: string): void => {
+  const openModalWithContent = (content: string, type: AlertColor): void => {
+    setModalType(type)
     setModalContent(content)
     setModalOpen(true)
   }
@@ -52,7 +55,9 @@ const Provider: React.FC<iProps> = ({ children }) => {
         isModalOpen,
         setModalOpen,
         closeModal,
-        openModalWithContent
+        openModalWithContent,
+        modalType,
+        setModalType
       }}
     >
       {children}

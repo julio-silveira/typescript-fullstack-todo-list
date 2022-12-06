@@ -1,3 +1,4 @@
+import { AlertColor } from '@mui/material'
 import { ITaskData } from './taskTypes'
 
 export type ContextType = {
@@ -11,5 +12,7 @@ export type ContextType = {
   isModalOpen: boolean
   setModalOpen: (bool: boolean) => void
   closeModal: () => void
-  openModalWithContent: (content: string) => void
+  openModalWithContent: (content: string, type: AlertColor) => void
+  modalType: AlertColor
+  setModalType: (content: AlertColor) => void
 }
