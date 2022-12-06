@@ -41,11 +41,13 @@ class UserControler {
         });
         this.createUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { username, password } = req.body;
+            if (password === '')
+                throw new restify_errors_1.BadRequestError('O campo de senha não pode estar vazio');
             const passwordHash = yield (0, bcrypt_1.hash)(password, 8);
-            const user = yield this.userService.createUser({ username, passwordHash });
+            yield this.userService.createUser({ username, passwordHash });
             res
                 .status(statusCodes_1.default.CREATED)
-                .json({ message: 'Usuário cadastrado com sucesso', user: user.username });
+                .json({ message: 'Usuário cadastrado com sucesso' });
         });
     }
 }

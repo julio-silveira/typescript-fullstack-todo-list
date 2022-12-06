@@ -41,13 +41,13 @@ class TaskControler {
             const taskId = Number(req.params.taskId);
             const tasksData = req.body;
             yield this.taskServices.update(userId, taskId, Object.assign({ userId }, tasksData));
-            res.status(statusCodes_1.default.NO_CONTENT).end();
+            res.status(statusCodes_1.default.OK).json({ message: 'Tarefa editada com sucesso' });
         });
         this.remove = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const userId = Number(req.params.userId);
             const taskId = Number(req.params.taskId);
             yield this.taskServices.remove(userId, taskId);
-            res.status(statusCodes_1.default.NO_CONTENT).end();
+            res.status(statusCodes_1.default.OK).json({ message: 'Tarefa excluída com sucesso' });
         });
     }
 }

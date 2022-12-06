@@ -31,7 +31,7 @@ class TaskServices {
         const entries = Object.entries(task);
         for (let i = 0; i < entries.length; i += 1) {
             const [property, value] = entries[i];
-            if (!value) {
+            if (!value && property !== properties[1]) {
                 return [false, property];
             }
         }

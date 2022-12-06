@@ -6,6 +6,8 @@ import AppContext from '../../context/AppContext'
 import { ContextType } from '../../@types/ContextTypes'
 import { Modal } from '../Modal'
 import { IFetchLoginMessage } from '../../@types/taskTypes'
+import { Box, Button, Paper, TextField, Typography } from '@mui/material'
+import { Stack } from '@mui/system'
 
 const FORM_INITIAL_STATE = {
   username: '',
@@ -56,48 +58,84 @@ export default function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>{isRegister ? 'RegisterForm' : 'LoginForm'}</h3>
-      <label htmlFor="username">
-        <input
+    <Paper
+      elevation={2}
+      sx={{
+        width: { xs: '90%', sm: '40%', md: '30%' },
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center ',
+        py: '50px'
+      }}
+      component="article"
+      onSubmit={handleSubmit}
+    >
+      <Stack
+        spacing={1}
+        sx={{
+          width: '80%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center '
+        }}
+        component="form"
+        onSubmit={handleSubmit}
+      >
+        <Typography variant="h5" pb={5}>
+          To do List
+        </Typography>
+
+        <TextField
+          size="small"
+          label="Nome de Usuário"
+          variant="outlined"
           onChange={handleChange}
           value={formData.username}
           type="username"
           id="username"
-          placeholder="username"
+          fullWidth
         />
-      </label>
-      <label htmlFor="password">
-        <input
+        <TextField
+          size="small"
+          label="Senha"
           onChange={handleChange}
           value={formData.password}
           type="password"
           id="password"
-          placeholder="password"
+          fullWidth
         />
-      </label>
-      {isRegister ? (
-        <section>
-          <button type="submit">Registrar</button>
-          <span>
-            Deseja fazer login?
-            <button type="button" onClick={() => setIsRegister(false)}>
-              Voltar a página de login
-            </button>
-          </span>
-        </section>
-      ) : (
-        <section>
-          <button type="submit">Login</button>
-          <span>
-            Não tem conta?
-            <button type="button" onClick={() => setIsRegister(true)}>
-              Cadastre-se
-            </button>
-          </span>
-        </section>
-      )}
-      {isModalOpen && <Modal />}
-    </form>
+
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+          component="section"
+        >
+          <Button fullWidth type="submit" variant="contained">
+            {isRegister ? 'Registrar' : 'Entrar'}
+          </Button>
+          <Box sx={{ display: 'flex' }}>
+            <Typography variant="body2">
+              {isRegister ? 'Deseja fazer login?' : 'Não tem conta?'}
+
+              <Button
+                color="secondary"
+                size="small"
+                type="button"
+                onClick={() => setIsRegister(!isRegister)}
+              >
+                {isRegister ? 'Login' : 'Cadastre-se'}
+              </Button>
+            </Typography>
+          </Box>
+        </Box>
+
+        {isModalOpen && <Modal />}
+      </Stack>
+    </Paper>
   )
 }
