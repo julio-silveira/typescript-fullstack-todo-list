@@ -1,7 +1,8 @@
 version: '3.9'
+name: typescript-todo-list
 services:
   frontend:
-    container_name: todo-dev-frontend
+    container_name: todo-frontend
     build: ./frontend
     ports:
       - 3000:3000
@@ -16,7 +17,7 @@ services:
       timeout: 10s
       retries: 5
   backend:
-    container_name: todo-dev-backend
+    container_name: todo-backend
     build: ./backend
     ports:
       - 8000:8000

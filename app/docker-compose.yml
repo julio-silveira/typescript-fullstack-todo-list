@@ -1,4 +1,5 @@
 version: '3.9'
+name: typescript-todo-list
 services:
   frontend:
     container_name: todo-frontend
