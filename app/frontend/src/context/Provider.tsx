@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { AlertColor } from '@mui/material'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ITaskData } from '../@types/taskTypes'
 import { getTasks } from '../helpers/taskFetch'
@@ -34,14 +35,6 @@ const Provider: React.FC<iProps> = ({ children }) => {
     }
     setLoading(false)
   }, [])
-
-  // useEffect((): void => {
-  //   const fetchtasks = async () => {
-  //     await updateTasks()
-  //   }
-
-  //   fetchtasks()
-  // }, [updateTasks])
 
   const closeModal = () => setModalOpen(false)
   const openModalWithContent = (content: string, type: AlertColor): void => {
