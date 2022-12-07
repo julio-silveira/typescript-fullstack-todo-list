@@ -7,21 +7,23 @@ export const getTasks = async (): Promise<TaskOutput> => {
   try {
     const userId = getUserId()
     const token = getToken()
-    const response = await fetch(
-      `http://localhost:8000/users/${userId}/tasks`,
-      {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', authorization: token }
-      }
-    )
-    const data = await response.json()
+    if (token !== '') {
+      const response = await fetch(
+        `http://localhost:8000/users/${userId}/tasks`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json', authorization: token }
+        }
+      )
+      const data = await response.json()
 
-    return data.map(
-      (task: ITaskData): TaskOutput => ({
-        ...task,
-        status: smIntToBool(task.status)
-      })
-    )
+      return data.map(
+        (task: ITaskData): TaskOutput => ({
+          ...task,
+          status: smIntToBool(task.status)
+        })
+      )
+    }
   } catch (error) {
     console.error(error)
   }

@@ -1,9 +1,21 @@
+import {
+  Checkbox,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  TextField
+} from '@mui/material'
 import React, { useContext, useState } from 'react'
 import { ContextType } from '../../@types/ContextTypes'
 import { ITaskState } from '../../@types/taskTypes'
 import { IFetchLoginMessage } from '../../@types/userTypes'
 import AppContext from '../../context/AppContext'
 import { deleteTask, editTask } from '../../helpers/taskFetch'
+import ModeEditIcon from '@mui/icons-material/ModeEdit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { Box } from '@mui/system'
 
 interface IOnEditTask {
   onEdit: boolean
@@ -63,7 +75,7 @@ const TasksList: React.FC = () => {
       updateTasks()
       setOnEditTask(INITIAL_ON_EDIT_TASK)
       if (message !== undefined) {
-        openModalWithContent(message)
+        openModalWithContent(message, 'success')
       }
     } else {
       const { status, description } = userTasks[index]
@@ -76,61 +88,49 @@ const TasksList: React.FC = () => {
     const { message } = (await deleteTask(id, userId)) as IFetchLoginMessage
     updateTasks()
     if (message !== undefined) {
-      openModalWithContent(message)
+      openModalWithContent(message, 'success')
     }
   }
 
   return (
-    <ul>
+    <List>
       {userTasks.map(({ id, userId, status, description }, index) => (
-        <li style={{ margin: '10px' }} key={index}>
+        <ListItem style={{ margin: '10px' }} key={index}>
           {onEditTask.onEdit && onEditTask.task === index ? (
-            <div>
-              <label htmlFor={`${index}`}>
-                <input
-                  id={`${index}`}
-                  name="status"
-                  checked={status}
-                  type="checkbox"
-                  onChange={handleCheck}
-                />
-              </label>
-              <label htmlFor="taskDescription">
-                <input
-                  id="taskDescription"
-                  name="description"
-                  value={taskValues.description}
-                  type="text"
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+            <TextField
+              color="primary"
+              variant="filled"
+              size="small"
+              onChange={handleChange}
+              id="taskDescription"
+              name="description"
+              label="Adicionar Tarefa"
+              value={taskValues.description}
+            />
           ) : (
-            <div>
-              <label htmlFor={`${index}`}>
-                <input
-                  id={`${index}`}
-                  name="status"
-                  checked={status}
-                  type="checkbox"
-                  onChange={handleCheck}
-                />
-              </label>
-              <span>{description}</span>
-            </div>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Checkbox
+                id={`${index}`}
+                name="status"
+                checked={status}
+                onChange={handleCheck}
+              />
+
+              <ListItemText>{description}</ListItemText>
+            </Box>
           )}
-          <button
+          <IconButton
             onClick={() => handleEditBtn(index, id, userId)}
             type="button"
           >
-            Editar Tarefa
-          </button>
-          <button onClick={() => handleDelBtn(id, userId)} type="button">
-            Excluir Editar
-          </button>
-        </li>
+            <ModeEditIcon fontSize="small" />
+          </IconButton>
+          <IconButton onClick={() => handleDelBtn(id, userId)} type="button">
+            <DeleteIcon fontSize="small" />
+          </IconButton>
+        </ListItem>
       ))}
-    </ul>
+    </List>
   )
 }
 

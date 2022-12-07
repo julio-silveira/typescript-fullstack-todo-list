@@ -10,6 +10,11 @@ export const saveUserId = (userId: number | undefined): void => {
   }
 }
 
+export const clearLocalStorage = () => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('userId')
+}
+
 export const getToken = (): string => localStorage.getItem('token') || ''
 
 export const getUserId = (): string => localStorage.getItem('userId') || ''
