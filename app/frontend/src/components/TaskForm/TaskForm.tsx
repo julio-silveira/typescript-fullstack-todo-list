@@ -7,7 +7,7 @@ import AppContext from '../../context/AppContext'
 import { saveTask } from '../../helpers/taskFetch'
 import AddIcon from '@mui/icons-material/Add'
 import LogoutIcon from '@mui/icons-material/Logout'
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import ListAltIcon from '@mui/icons-material/ListAlt'
 import { useNavigate } from 'react-router-dom'
 import { clearLocalStorage } from '../../helpers/localStorage'
 
@@ -68,11 +68,7 @@ const TaskForm: React.FC = () => {
           alignItems: 'center'
         }}
       >
-        <FormatListBulletedIcon
-          sx={{ px: 2 }}
-          fontSize="large"
-          color="primary"
-        />
+        <ListAltIcon sx={{ px: 2 }} fontSize="large" color="primary" />
         <Box
           sx={{
             display: 'flex',

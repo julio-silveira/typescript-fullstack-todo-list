@@ -7,11 +7,11 @@ services:
     ports:
       - 3000:3000
     working_dir: /app/frontend
+    volumes:
+      - ./frontend/src:/app/frontend/src
     depends_on:
       backend:
         condition: service_healthy
-    volumes:
-      - ./frontend/src:/app/frontend/src
     healthcheck:
       test: ["CMD", "lsof", "-t", "-i:3000"]
       timeout: 10s
@@ -23,32 +23,59 @@ services:
       - 8000:8000
     platform: linux/x86_64
     working_dir: /app/backend
-    command: run dev
-    volumes:
-      - ./backend/src:/app/backend/src
     depends_on:
       db:
         condition: service_healthy
+    command: run dev
+    volumes:
+      - ./backend/src:/app/backend/src
     env_file:
       - ../.env/
     healthcheck:
       test: ["CMD", "lsof", "-t", "-i:8000"]
       timeout: 10s
       retries: 5
+    networks:
+      - postgres
   db:
-    image: mysql:8.0.21
+    image: postgres:14.1-alpine
     container_name: todo-db
     platform: linux/x86_64
-    volumes:
-      - .db_data:/var/lib/mysql
-    ports:
-      - 3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
     restart: 'always'
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD", "pg_isready", "-U", "postgres"]
       timeout: 10s
       retries: 5
+    networks:
+      - postgres
     cap_add:
       - SYS_NICE
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "julioqueiroz15@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "pgadminroot"
+    volumes:
+     - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+ db-data:
+ pgadmin-data:
+networks:
+  postgres:
+    driver: bridge
