@@ -1,29 +1,26 @@
-import {
-  Checkbox,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  TextField
-} from '@mui/material'
+import { Box, Divider, List, ListItem } from '@mui/material'
 import React, { useContext, useState } from 'react'
 import { ContextType } from '../../@types/ContextTypes'
 import { ITaskState } from '../../@types/taskTypes'
 import { IFetchLoginMessage } from '../../@types/userTypes'
 import AppContext from '../../context/AppContext'
 import { deleteTask, editTask } from '../../helpers/taskFetch'
-import ModeEditIcon from '@mui/icons-material/ModeEdit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import { Box } from '@mui/system'
+import TaskItem from './TaskItem'
+import TaskOnEdit from './TaskOnEdit'
 
 interface IOnEditTask {
   onEdit: boolean
   task: number | null
 }
 
-const INITIAL_ON_EDIT_TASK: IOnEditTask = {
+const INITIAL_ONEDIT_TASK: IOnEditTask = {
   onEdit: false,
   task: null
+}
+
+const INITIAL_TASK_VALUES: ITaskState = {
+  status: false,
+  description: ''
 }
 
 const TasksList: React.FC = () => {
@@ -31,12 +28,8 @@ const TasksList: React.FC = () => {
     AppContext
   ) as ContextType
 
-  const [onEditTask, setOnEditTask] =
-    useState<IOnEditTask>(INITIAL_ON_EDIT_TASK)
-  const [taskValues, setTaskValues] = useState<ITaskState>({
-    status: false,
-    description: ''
-  })
+  const [onEditTask, setOnEditTask] = useState<IOnEditTask>(INITIAL_ONEDIT_TASK)
+  const [taskValues, setTaskValues] = useState<ITaskState>(INITIAL_TASK_VALUES)
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = event.target
@@ -72,7 +65,8 @@ const TasksList: React.FC = () => {
         description
       })) as IFetchLoginMessage
       updateTasks()
-      setOnEditTask(INITIAL_ON_EDIT_TASK)
+      setTaskValues(INITIAL_TASK_VALUES)
+      setOnEditTask(INITIAL_ONEDIT_TASK)
       if (message !== undefined) {
         openModalWithContent(message, 'success')
       }
@@ -92,44 +86,64 @@ const TasksList: React.FC = () => {
   }
 
   return (
-    <List>
-      {userTasks.map(({ id, userId, status, description }, index) => (
-        <ListItem style={{ margin: '10px' }} key={index}>
-          {onEditTask.onEdit && onEditTask.task === index ? (
-            <TextField
-              color="primary"
-              variant="filled"
-              size="small"
-              onChange={handleChange}
-              id="taskDescription"
-              name="description"
-              label="Adicionar Tarefa"
-              value={taskValues.description}
-            />
-          ) : (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Checkbox
-                id={`${index}`}
-                name="status"
-                checked={status}
-                onChange={handleCheck}
-              />
-
-              <ListItemText>{description}</ListItemText>
+    <>
+      {userTasks.length > 0 ? (
+        <List
+          sx={{
+            mt: 2,
+            mb: 8,
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
+          {userTasks.map(({ id, userId, status, description }, index) => (
+            <Box key={index}>
+              <ListItem
+                sx={{
+                  mb: 1,
+                  maxWidth: '90%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                {onEditTask.onEdit && onEditTask.task === index ? (
+                  <TaskOnEdit
+                    props={{
+                      handleChange,
+                      taskValues,
+                      index,
+                      id,
+                      userId,
+                      handleEditBtn,
+                      handleDelBtn
+                    }}
+                  />
+                ) : (
+                  <TaskItem
+                    props={{
+                      index,
+                      status,
+                      handleCheck,
+                      description,
+                      id,
+                      userId,
+                      handleEditBtn,
+                      onEdit: onEditTask.onEdit
+                    }}
+                  />
+                )}
+              </ListItem>
+              <Divider />
             </Box>
-          )}
-          <IconButton
-            onClick={() => handleEditBtn(index, id, userId)}
-            type="button"
-          >
-            <ModeEditIcon fontSize="small" />
-          </IconButton>
-          <IconButton onClick={() => handleDelBtn(id, userId)} type="button">
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </ListItem>
-      ))}
-    </List>
+          ))}
+        </List>
+      ) : (
+        <p>Adicione uma Tarefa!</p>
+      )}
+    </>
   )
 }
 

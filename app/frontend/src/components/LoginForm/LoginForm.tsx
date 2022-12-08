@@ -60,7 +60,7 @@ export default function LoginForm() {
       elevation={2}
       sx={{
         border: '1px solid #42a5f5',
-        bgcolor: '#e3f2fd',
+        bgcolor: '#4fc3f7',
         width: { xs: '90%', sm: '40%', md: '30%' },
         display: 'flex',
         flexDirection: 'column',

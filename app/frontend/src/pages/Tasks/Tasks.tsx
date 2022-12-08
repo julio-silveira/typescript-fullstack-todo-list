@@ -25,14 +25,8 @@ export default function Tasks() {
       component="main"
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
     >
+      {loading ? <Loading /> : <TasksList />}
       <TaskForm />
-      {loading ? (
-        <Loading />
-      ) : userTasks.length > 0 ? (
-        <TasksList />
-      ) : (
-        <p>Adicione uma Tarefa!</p>
-      )}
       {isModalOpen && <Modal />}
     </Box>
   )
