@@ -7,7 +7,7 @@ const config: Options = {
   database: process.env.DB_NAME || 'todo_db',
   host: process.env.DB_HOST || 'localhost',
   port: Number(process.env.DB_PORT) || 3306,
-  dialect: 'mysql'
+  dialect: 'postgres'
 }
 
 export = config

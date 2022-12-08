@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, IconButton, TextField } from '@mui/material'
+import { IconButton, TextField } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DoneIcon from '@mui/icons-material/Done'
 
@@ -33,7 +33,7 @@ const TaskOnEdit: React.FC<ITaskItem> = ({
   }
 }) => {
   return (
-    <Box>
+    <>
       <TextField
         color="primary"
         variant="outlined"
@@ -43,6 +43,7 @@ const TaskOnEdit: React.FC<ITaskItem> = ({
         name="description"
         value={taskValues.description}
       />
+
       <IconButton
         onClick={() => handleEditBtn(index, id, userId)}
         type="button"
@@ -52,7 +53,7 @@ const TaskOnEdit: React.FC<ITaskItem> = ({
       <IconButton onClick={() => handleDelBtn(id, userId)} type="button">
         <DeleteIcon color="primary" fontSize="small" />
       </IconButton>
-    </Box>
+    </>
   )
 }
 
